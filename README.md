@@ -56,4 +56,16 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 ## License
 
+## Administración local
+
+El administrador principal se crea una sola vez mediante el comando interactivo:
+
+```bash
+php artisan admin:create
+```
+
+El comando `php artisan db:seed` crea `test@example.com` únicamente como cuenta secundaria de prueba en los entornos `local` y `testing`. Esa cuenta no es el administrador principal y no debe utilizarse como mecanismo de aprovisionamiento en producción.
+
+## License
+
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

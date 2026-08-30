@@ -15,11 +15,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        if (! app()->environment(['local', 'testing'])) {
+            $this->command?->warn('El usuario de prueba solo puede crearse en entornos local o testing.');
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+            return;
+        }
+
+        // Cuenta secundaria exclusiva para pruebas locales. No reemplaza admin:create.
+        User::query()->updateOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Usuario de prueba',
+                'password' => 'password',
+                'role' => User::ROLE_ADMINISTRATOR,
+                'is_primary_admin' => false,
+                'is_active' => true,
+                'email_verified_at' => now(),
+            ],
+        );
     }
 }

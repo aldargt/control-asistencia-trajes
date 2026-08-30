@@ -10,6 +10,10 @@
             <p class="mt-2 text-sm text-slate-500">Ingresa tus datos para acceder al panel administrativo.</p>
         </div>
 
+        @if (session('status'))
+            <div class="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800" role="status">{{ session('status') }}</div>
+        @endif
+
         <form method="POST" action="{{ route('login.store') }}" class="space-y-5">
             @csrf
             <div>
@@ -20,7 +24,10 @@
             </div>
 
             <div>
-                <label for="password" class="mb-2 block text-sm font-medium">Contraseña</label>
+                <div class="mb-2 flex items-center justify-between gap-4">
+                    <label for="password" class="block text-sm font-medium">Contraseña</label>
+                    <a href="{{ route('password.request') }}" class="text-xs font-semibold text-slate-600 hover:text-slate-950">¿Olvidaste tu contraseña?</a>
+                </div>
                 <input id="password" name="password" type="password" autocomplete="current-password" required
                     class="w-full rounded-xl border border-slate-300 px-3.5 py-3 text-sm outline-none transition focus:border-slate-700 focus:ring-4 focus:ring-slate-100 @error('password') border-red-500 @enderror">
                 @error('password')<p class="mt-2 text-sm text-red-600">{{ $message }}</p>@enderror
