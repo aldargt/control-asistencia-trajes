@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(JobRoleSeeder::class);
+
         if (! app()->environment(['local', 'testing'])) {
             $this->command?->warn('El usuario de prueba solo puede crearse en entornos local o testing.');
 

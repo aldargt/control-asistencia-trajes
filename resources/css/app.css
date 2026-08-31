@@ -9,3 +9,37 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer components {
+    .field {
+        @apply w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm outline-none transition focus:border-slate-700 focus:ring-4 focus:ring-slate-100;
+    }
+
+    .field-error {
+        @apply border-red-500;
+    }
+
+    .field-message {
+        @apply mt-2 text-sm text-red-600;
+    }
+
+    .button-primary {
+        @apply inline-flex items-center justify-center rounded-xl bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-300;
+    }
+
+    .button-secondary {
+        @apply inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50;
+    }
+
+    .card {
+        @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6;
+    }
+
+    .card-title {
+        @apply text-lg font-semibold;
+    }
+
+    .status-badge {
+        @apply inline-flex rounded-full px-2.5 py-1 text-xs font-semibold;
+    }
+}

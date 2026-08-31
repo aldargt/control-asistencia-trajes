@@ -2,9 +2,18 @@
 
 return [
     'boolean' => 'El campo :attribute debe ser verdadero o falso.',
+    'before_or_equal' => 'El campo :attribute debe ser una fecha anterior o igual a :date.',
+    'after_or_equal' => 'El campo :attribute debe ser una fecha posterior o igual a :date.',
     'confirmed' => 'La confirmación de :attribute no coincide.',
+    'date' => 'El campo :attribute debe ser una fecha válida.',
+    'decimal' => 'El campo :attribute debe tener entre :min y :max decimales.',
     'email' => 'El campo :attribute debe ser un correo electrónico válido.',
+    'exists' => 'El valor seleccionado para :attribute no es válido.',
+    'gt' => [
+        'numeric' => 'El campo :attribute debe ser mayor que :value.',
+    ],
     'in' => 'El valor seleccionado para :attribute no es válido.',
+    'integer' => 'El campo :attribute debe ser un número entero.',
     'lowercase' => 'El campo :attribute debe estar en minúsculas.',
     'max' => [
         'string' => 'El campo :attribute no debe tener más de :max caracteres.',
@@ -13,6 +22,10 @@ return [
         'string' => 'El campo :attribute debe tener al menos :min caracteres.',
     ],
     'required' => 'El campo :attribute es obligatorio.',
+    'lte' => [
+        'numeric' => 'El campo :attribute debe ser menor o igual que :value.',
+    ],
+    'numeric' => 'El campo :attribute debe ser un número.',
     'string' => 'El campo :attribute debe ser texto.',
     'unique' => 'El valor de :attribute ya está registrado.',
     'attributes' => [
@@ -22,5 +35,22 @@ return [
         'password_confirmation' => 'confirmación de contraseña',
         'role' => 'rol',
         'is_active' => 'estado',
+        'full_name' => 'nombre completo',
+        'identity_document' => 'documento de identidad',
+        'biometric_id' => 'ID biométrico',
+        'occupation_status' => 'situación u ocupación',
+        'phone' => 'teléfono',
+        'address' => 'dirección',
+        'job_role_id' => 'rol laboral',
+        'reference_weekly_hours' => 'horas semanales de referencia',
+        'reference_monthly_salary' => 'salario mensual de referencia',
+        'hire_date' => 'fecha de ingreso',
+        'notes' => 'observaciones',
+        'monthly_salary' => 'salario mensual',
+        'weekly_hours' => 'horas semanales comprometidas',
+        'effective_from' => 'inicio de vigencia',
+        'effective_to' => 'fin de vigencia',
+        'reason' => 'motivo',
+        'description' => 'descripción',
     ],
 ];

@@ -1,0 +1,11 @@
+@php($editing = isset($jobRole))
+<div class="space-y-5">
+    <div><label for="name" class="mb-2 block text-sm font-medium">Nombre del rol laboral <span class="text-red-600">*</span></label><input id="name" name="name" type="text" value="{{ old('name', $jobRole->name ?? '') }}" required class="field @error('name') field-error @enderror">@error('name')<p class="field-message">{{ $message }}</p>@enderror</div>
+    <div class="grid gap-5 sm:grid-cols-2">
+        <div><label for="reference_weekly_hours" class="mb-2 block text-sm font-medium">Horas semanales de referencia <span class="text-red-600">*</span></label><input id="reference_weekly_hours" name="reference_weekly_hours" type="number" min="0.01" max="168" step="0.01" value="{{ old('reference_weekly_hours', $jobRole->reference_weekly_hours ?? '') }}" required class="field @error('reference_weekly_hours') field-error @enderror">@error('reference_weekly_hours')<p class="field-message">{{ $message }}</p>@enderror</div>
+        <div><label for="reference_monthly_salary" class="mb-2 block text-sm font-medium">Salario mensual de referencia (Bs.) <span class="text-red-600">*</span></label><input id="reference_monthly_salary" name="reference_monthly_salary" type="number" min="0.01" step="0.01" value="{{ old('reference_monthly_salary', $jobRole->reference_monthly_salary ?? '') }}" required class="field @error('reference_monthly_salary') field-error @enderror">@error('reference_monthly_salary')<p class="field-message">{{ $message }}</p>@enderror</div>
+    </div>
+    <div><label for="description" class="mb-2 block text-sm font-medium">Descripción <span class="text-slate-400">(opcional)</span></label><textarea id="description" name="description" rows="4" class="field @error('description') field-error @enderror">{{ old('description', $jobRole->description ?? '') }}</textarea>@error('description')<p class="field-message">{{ $message }}</p>@enderror</div>
+    @unless($editing)<input type="hidden" name="is_active" value="1">@endunless
+</div>
+<div class="mt-8 flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:justify-end"><a href="{{ route('job-roles.index') }}" class="button-secondary">Cancelar</a><button class="button-primary" type="submit">{{ $editing ? 'Guardar cambios' : 'Crear rol laboral' }}</button></div>
