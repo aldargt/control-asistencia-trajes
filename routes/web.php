@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\BiometricImportController;
 use App\Http\Controllers\CollaboratorController;
 use App\Http\Controllers\ControlPeriodController;
 use App\Http\Controllers\EmploymentConditionController;
@@ -61,5 +62,11 @@ Route::middleware(['auth', 'active'])->group(function () {
             ->except(['show', 'destroy'])
             ->parameters(['periodos-control' => 'control_period'])
             ->names('control-periods');
+    });
+
+    Route::middleware('can:import-biometric-data')->group(function () {
+        Route::get('importaciones-biometrico', [BiometricImportController::class, 'index'])->name('biometric-imports.index');
+        Route::post('importaciones-biometrico', [BiometricImportController::class, 'store'])->name('biometric-imports.store');
+        Route::get('importaciones-biometrico/{biometric_import}', [BiometricImportController::class, 'show'])->name('biometric-imports.show');
     });
 });
