@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'between' => [
+        'numeric' => 'El campo :attribute debe estar entre :min y :max.',
+    ],
     'boolean' => 'El campo :attribute debe ser verdadero o falso.',
     'before_or_equal' => 'El campo :attribute debe ser una fecha anterior o igual a :date.',
     'after_or_equal' => 'El campo :attribute debe ser una fecha posterior o igual a :date.',
@@ -52,5 +55,8 @@ return [
         'effective_to' => 'fin de vigencia',
         'reason' => 'motivo',
         'description' => 'descripción',
+        'year' => 'año',
+        'month' => 'mes',
+        'reference_days' => 'días de referencia',
     ],
 ];

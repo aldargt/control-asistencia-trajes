@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\CollaboratorController;
+use App\Http\Controllers\ControlPeriodController;
 use App\Http\Controllers\EmploymentConditionController;
 use App\Http\Controllers\JobRoleController;
 use App\Http\Controllers\UserController;
@@ -53,5 +54,12 @@ Route::middleware(['auth', 'active'])->group(function () {
             ->names('job-roles');
         Route::patch('roles-laborales/{job_role}/estado', [JobRoleController::class, 'toggleStatus'])
             ->name('job-roles.toggle-status');
+    });
+
+    Route::middleware('can:manage-control-periods')->group(function () {
+        Route::resource('periodos-control', ControlPeriodController::class)
+            ->except(['show', 'destroy'])
+            ->parameters(['periodos-control' => 'control_period'])
+            ->names('control-periods');
     });
 });
