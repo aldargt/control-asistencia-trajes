@@ -123,8 +123,14 @@ class BiometricImportController extends Controller
 
     public function show(BiometricImport $biometricImport): View
     {
-        $biometricImport->load(['controlPeriod', 'importer', 'people.collaborator', 'people.days.marks']);
+        $biometricImport->load(['controlPeriod', 'importer', 'people.collaborator', 'people.days.marks', 'people.attendanceInterpretations']);
+        $peopleWithMarksCount = $biometricImport->people->filter(fn ($person): bool => $person->mark_count > 0)->count();
+        $peopleWithoutMarksCount = $biometricImport->people->filter(fn ($person): bool => $person->mark_count === 0)->count();
 
-        return view('biometric-imports.show', compact('biometricImport'));
+        return view('biometric-imports.show', [
+            'biometricImport' => $biometricImport,
+            'peopleWithMarksCount' => $peopleWithMarksCount,
+            'peopleWithoutMarksCount' => $peopleWithoutMarksCount,
+        ]);
     }
 }

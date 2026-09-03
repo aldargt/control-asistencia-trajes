@@ -76,6 +76,27 @@ class BiometricImportTest extends TestCase
         $this->assertSame(['08:38:12', '20:30:59'], $importer->extractTimes('08:38:12 20:30:59'));
     }
 
+    public function test_inactive_collaborator_with_marks_is_imported_without_changing_status(): void
+    {
+        Storage::fake('local');
+        $administrator = User::factory()->create();
+        $period = $this->period($administrator, 2026, 2);
+        $collaborator = Collaborator::factory()->create(['biometric_id' => '15', 'is_active' => false]);
+
+        $this->actingAs($administrator)->post(route('biometric-imports.store'), [
+            'control_period_id' => $period->id,
+            'import_file' => $this->report($period, [['id' => '15', 'name' => $collaborator->full_name, 'days' => [1 => '08:00']]]),
+        ])->assertSessionHasNoErrors();
+
+        $import = BiometricImport::firstOrFail();
+        $this->assertSame($collaborator->id, $import->people()->firstOrFail()->collaborator_id);
+        $this->assertSame(1, $import->mark_count);
+        $this->assertFalse($collaborator->fresh()->is_active);
+        $this->get(route('biometric-imports.show', $import))
+            ->assertOk()
+            ->assertSee('Colaborador inactivo con actividad biométrica durante el período');
+    }
+
     public function test_review_starts_with_people_collapsed_and_presents_source_name_as_context(): void
     {
         Storage::fake('local');

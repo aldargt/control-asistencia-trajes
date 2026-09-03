@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceInterpretationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
@@ -68,5 +69,7 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::get('importaciones-biometrico', [BiometricImportController::class, 'index'])->name('biometric-imports.index');
         Route::post('importaciones-biometrico', [BiometricImportController::class, 'store'])->name('biometric-imports.store');
         Route::get('importaciones-biometrico/{biometric_import}', [BiometricImportController::class, 'show'])->name('biometric-imports.show');
+        Route::post('importaciones-biometrico/{biometric_import}/interpretacion', [AttendanceInterpretationController::class, 'store'])->name('biometric-imports.interpretation.store');
+        Route::get('importaciones-biometrico/{biometric_import}/interpretacion', [AttendanceInterpretationController::class, 'show'])->name('biometric-imports.interpretation.show');
     });
 });

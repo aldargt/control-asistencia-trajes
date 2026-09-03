@@ -29,4 +29,20 @@ class BiometricImportPerson extends Model
     {
         return $this->hasMany(BiometricImportDay::class)->orderBy('mark_date');
     }
+
+    public function attendanceInterpretations(): HasMany
+    {
+        return $this->hasMany(AttendanceInterpretation::class)->orderBy('work_date');
+    }
+
+    public function getMarkCountAttribute(): int
+    {
+        $days = $this->relationLoaded('days')
+            ? $this->days
+            : $this->days()->withCount('marks')->get();
+
+        return (int) $days->sum(fn (BiometricImportDay $day): int => $day->relationLoaded('marks')
+            ? $day->marks->count()
+            : (int) $day->marks_count);
+    }
 }
