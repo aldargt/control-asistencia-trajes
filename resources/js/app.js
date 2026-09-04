@@ -147,6 +147,7 @@ correctionForm?.addEventListener('submit', async (event) => {
             return;
         }
         if (! response.ok) throw new Error('request_failed');
+        correctionModal.close();
         window.location.reload();
     } catch {
         showCorrectionErrors(['No se pudo guardar la corrección. Inténtalo nuevamente.']);
@@ -167,7 +168,23 @@ document.querySelector('[data-undo-correction]')?.addEventListener('click', asyn
 });
 const correctionToReopen = [...document.querySelectorAll('[data-correction-open]')]
     .find((button) => JSON.parse(document.querySelector(`#${button.dataset.source}`).textContent).open);
-if (correctionToReopen) openCorrection(correctionToReopen);
+if (correctionToReopen) {
+    openCorrection(correctionToReopen);
+    const currentUrl = new URL(window.location.href);
+    if (currentUrl.searchParams.has('interpretation_id')) {
+        currentUrl.searchParams.delete('interpretation_id');
+        window.history.replaceState({}, '', currentUrl);
+    }
+}
+
+const calculationDayModal = document.querySelector('#calculation-day-modal');
+const calculationDayContent = calculationDayModal?.querySelector('[data-calculation-day-content]');
+document.querySelectorAll('[data-calculation-day-open]').forEach((button) => button.addEventListener('click', () => {
+    const template = document.querySelector(`#${button.dataset.source}`);
+    if (! calculationDayModal || ! calculationDayContent || ! template) return;
+    calculationDayContent.replaceChildren(template.content.cloneNode(true));
+    calculationDayModal.showModal();
+}));
 
 const collaboratorStatusModal = document.querySelector('#collaborator-status-modal');
 const collaboratorStatusForm = collaboratorStatusModal?.querySelector('[data-status-form]');

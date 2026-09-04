@@ -106,6 +106,7 @@
                 @php($correction = $interpretation->getRelation('activeCorrectionRecord'))
                 <?php
                     $isFailedModal = (int) old('correction_interpretation_id') === $interpretation->id && $errors->any();
+                    $isRequestedModal = ! $errors->any() && $requestedInterpretationId === $interpretation->id;
                     $manual = $correction?->marks->where('source_type', 'manual')->map(fn ($mark) => ['time' => $mark->occurred_at->format('H:i')])->values()->all() ?? [];
                     if ($isFailedModal) {
                         $manual = collect(old('manual_mark_times', []))->map(fn ($time) => ['time' => $time])->all();
@@ -126,7 +127,7 @@
                         'manual' => $manual,
                         'notes' => $isFailedModal ? old('notes') : $correction?->notes,
                         'errors' => $isFailedModal ? $errors->all() : [],
-                        'open' => $isFailedModal,
+                        'open' => $isFailedModal || $isRequestedModal,
                     ];
                 ?>
                 <script type="application/json" id="correction-data-{{ $interpretation->id }}">{!! json_encode($modalData, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>

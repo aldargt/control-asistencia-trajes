@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceCalculationController;
 use App\Http\Controllers\AttendanceCorrectionController;
 use App\Http\Controllers\AttendanceInterpretationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -78,5 +79,10 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::get('inconsistencias', [AttendanceCorrectionController::class, 'index'])->name('attendance-corrections.index');
         Route::post('inconsistencias/{attendance_interpretation}', [AttendanceCorrectionController::class, 'store'])->name('attendance-corrections.store');
         Route::delete('inconsistencias/{attendance_interpretation}', [AttendanceCorrectionController::class, 'destroy'])->name('attendance-corrections.destroy');
+    });
+
+    Route::middleware('can:calculate-attendance')->group(function () {
+        Route::get('calculo-horas', [AttendanceCalculationController::class, 'index'])->name('attendance-calculations.index');
+        Route::post('calculo-horas/{control_period}', [AttendanceCalculationController::class, 'store'])->name('attendance-calculations.store');
     });
 });

@@ -29,6 +29,7 @@ class AttendanceCorrectionController extends Controller
         $selectedPerson = null;
         $interpretations = collect();
         $calendarWeeks = [];
+        $requestedInterpretationId = $request->integer('interpretation_id');
 
         if ($selectedPeriod) {
             $people = $selectedPeriod->biometricImport->people
@@ -56,6 +57,7 @@ class AttendanceCorrectionController extends Controller
         return view('attendance-corrections.index', compact(
             'interpretations', 'periods', 'periodSummaries', 'selectedPeriod', 'people',
             'personSummaries', 'selectedPerson', 'calendarWeeks',
+            'requestedInterpretationId',
         ));
     }
 
