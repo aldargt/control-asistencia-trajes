@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceCorrectionController;
 use App\Http\Controllers\AttendanceInterpretationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -71,5 +72,11 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::get('importaciones-biometrico/{biometric_import}', [BiometricImportController::class, 'show'])->name('biometric-imports.show');
         Route::post('importaciones-biometrico/{biometric_import}/interpretacion', [AttendanceInterpretationController::class, 'store'])->name('biometric-imports.interpretation.store');
         Route::get('importaciones-biometrico/{biometric_import}/interpretacion', [AttendanceInterpretationController::class, 'show'])->name('biometric-imports.interpretation.show');
+    });
+
+    Route::middleware('can:manage-attendance-corrections')->group(function () {
+        Route::get('inconsistencias', [AttendanceCorrectionController::class, 'index'])->name('attendance-corrections.index');
+        Route::post('inconsistencias/{attendance_interpretation}', [AttendanceCorrectionController::class, 'store'])->name('attendance-corrections.store');
+        Route::delete('inconsistencias/{attendance_interpretation}', [AttendanceCorrectionController::class, 'destroy'])->name('attendance-corrections.destroy');
     });
 });

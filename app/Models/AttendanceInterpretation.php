@@ -30,4 +30,21 @@ class AttendanceInterpretation extends Model
     {
         return $this->hasMany(InterpretedMark::class)->orderBy('sequence');
     }
+
+    public function corrections(): HasMany
+    {
+        return $this->hasMany(AttendanceCorrection::class, 'biometric_import_person_id', 'biometric_import_person_id');
+    }
+
+    public function activeCorrection(): ?AttendanceCorrection
+    {
+        $query = $this->corrections()
+            ->whereDate('work_date', $this->work_date)
+            ->whereNull('superseded_at')
+            ->whereNull('undone_at')
+            ->with('marks')
+            ->latest('corrected_at');
+
+        return $query->first();
+    }
 }

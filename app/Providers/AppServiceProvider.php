@@ -26,5 +26,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('manage-job-roles', fn (User $user): bool => $user->is_active && $user->isAdministrator());
         Gate::define('manage-control-periods', fn (User $user): bool => $user->is_active && $user->isAdministrator());
         Gate::define('import-biometric-data', fn (User $user): bool => $user->is_active && $user->isAdministrator());
+        Gate::define('manage-attendance-corrections', fn (User $user): bool => $user->is_active && $user->isAdministrator());
     }
 }

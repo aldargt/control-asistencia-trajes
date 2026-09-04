@@ -35,6 +35,11 @@ class BiometricImportPerson extends Model
         return $this->hasMany(AttendanceInterpretation::class)->orderBy('work_date');
     }
 
+    public function attendanceCorrections(): HasMany
+    {
+        return $this->hasMany(AttendanceCorrection::class)->orderByDesc('corrected_at');
+    }
+
     public function getMarkCountAttribute(): int
     {
         $days = $this->relationLoaded('days')

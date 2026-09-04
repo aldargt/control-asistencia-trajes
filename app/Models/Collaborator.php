@@ -56,6 +56,11 @@ class Collaborator extends Model
         return $this->hasMany(CollaboratorActivityPeriod::class)->orderBy('started_at');
     }
 
+    public function biometricImportPeople(): HasMany
+    {
+        return $this->hasMany(BiometricImportPerson::class);
+    }
+
     public function currentEmploymentCondition(): ?EmploymentCondition
     {
         if ($this->relationLoaded('employmentConditions')) {
