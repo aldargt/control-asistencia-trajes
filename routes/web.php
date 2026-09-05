@@ -11,6 +11,7 @@ use App\Http\Controllers\CollaboratorController;
 use App\Http\Controllers\ControlPeriodController;
 use App\Http\Controllers\EmploymentConditionController;
 use App\Http\Controllers\JobRoleController;
+use App\Http\Controllers\RemunerationCalculationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -84,5 +85,10 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::middleware('can:calculate-attendance')->group(function () {
         Route::get('calculo-horas', [AttendanceCalculationController::class, 'index'])->name('attendance-calculations.index');
         Route::post('calculo-horas/{control_period}', [AttendanceCalculationController::class, 'store'])->name('attendance-calculations.store');
+    });
+
+    Route::middleware('can:calculate-remunerations')->group(function () {
+        Route::get('remuneraciones', [RemunerationCalculationController::class, 'index'])->name('remunerations.index');
+        Route::post('remuneraciones/{control_period}', [RemunerationCalculationController::class, 'store'])->name('remunerations.store');
     });
 });

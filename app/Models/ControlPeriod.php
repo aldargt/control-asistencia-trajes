@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
@@ -29,6 +30,11 @@ class ControlPeriod extends Model
     public function biometricImport(): HasOne
     {
         return $this->hasOne(BiometricImport::class);
+    }
+
+    public function attendanceCalculations(): HasMany
+    {
+        return $this->hasMany(AttendanceCalculation::class);
     }
 
     public function getStartsAtAttribute(): Carbon

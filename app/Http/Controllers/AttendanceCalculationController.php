@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AttendanceCalculation;
+use App\Models\AttendanceCalculationDay;
 use App\Models\ControlPeriod;
 use App\Services\AttendanceCalculationService;
 use App\Support\MonthlyCalendar;
@@ -15,6 +16,19 @@ class AttendanceCalculationController extends Controller
     public function index(Request $request): View
     {
         $periods = ControlPeriod::query()->whereHas('biometricImport.people.attendanceInterpretations')->orderByDesc('year')->orderByDesc('month')->get();
+        $periodCalculations = AttendanceCalculation::query()->whereIn('control_period_id', $periods->pluck('id'))->with('days')->get()->groupBy('control_period_id');
+        $periodSummaries = $periods->mapWithKeys(function (ControlPeriod $period) use ($periodCalculations): array {
+            $calculations = $periodCalculations->get($period->id, collect());
+            $days = $calculations->flatMap->days;
+
+            return [$period->id => [
+                'calculated' => $calculations->isNotEmpty(),
+                'compatible' => $days->where('status', AttendanceCalculationDay::STATUS_RECOGNIZED)->where('source_type', AttendanceCalculationDay::SOURCE_AUTOMATIC)->count(),
+                'corrected' => $days->where('status', AttendanceCalculationDay::STATUS_RECOGNIZED)->where('source_type', AttendanceCalculationDay::SOURCE_CORRECTION)->count(),
+                'pending' => $days->where('status', AttendanceCalculationDay::STATUS_PENDING)->count(),
+                'no_marks' => $days->where('status', AttendanceCalculationDay::STATUS_NO_MARKS)->count(),
+            ]];
+        });
         $selectedPeriod = $periods->firstWhere('id', $request->integer('control_period_id'));
         $calculations = collect();
         $activeCalculations = collect();
@@ -42,7 +56,7 @@ class AttendanceCalculationController extends Controller
 
         return view('attendance-calculations.index', compact(
             'periods', 'selectedPeriod', 'calculations', 'activeCalculations',
-            'withoutMarksCalculations', 'selectedCalculation', 'calendarWeeks',
+            'withoutMarksCalculations', 'selectedCalculation', 'calendarWeeks', 'periodSummaries',
         ));
     }
 

@@ -140,6 +140,27 @@ class AttendanceCalculationTest extends TestCase
         $this->assertSame(0, $calculation->fresh()->recognized_minutes);
     }
 
+    public function test_period_card_summarizes_each_attendance_day_state_without_duplicates(): void
+    {
+        $this->addMarks('2026-07-02', ['08:00:00', '17:00:00']);
+        app(AttendanceInterpretationEngine::class)->interpret($this->import);
+        app(AttendanceCalculationService::class)->calculate($this->period);
+        $calculation = AttendanceCalculation::firstOrFail();
+
+        foreach ([
+            ['2026-07-03', AttendanceCalculationDay::STATUS_RECOGNIZED, AttendanceCalculationDay::SOURCE_CORRECTION, 480],
+            ['2026-07-04', AttendanceCalculationDay::STATUS_PENDING, AttendanceCalculationDay::SOURCE_AUTOMATIC, null],
+            ['2026-07-05', AttendanceCalculationDay::STATUS_NO_MARKS, null, null],
+        ] as [$date, $status, $source, $minutes]) {
+            $interpretation = $this->person->attendanceInterpretations()->create(['work_date' => $date, 'status' => 'complete', 'original_marks_count' => 0, 'logical_marks_count' => 0, 'duplicate_marks_count' => 0, 'interpreted_at' => now()]);
+            $calculation->days()->create(['attendance_interpretation_id' => $interpretation->id, 'work_date' => $date, 'status' => $status, 'source_type' => $source, 'recognized_minutes' => $minutes]);
+        }
+
+        $this->actingAs($this->administrator)->get(route('attendance-calculations.index'))
+            ->assertOk()->assertSee('>1</span> compatibles', false)->assertSee('>1</span> corregidas', false)
+            ->assertSee('>1</span> requieren revisión', false)->assertSee('>1</span> sin marcaciones', false);
+    }
+
     #[DataProvider('expectedMinuteCases')]
     public function test_expected_minutes_follow_weekly_hours_divided_by_six(int $weeklyHours, int $days, int $expected): void
     {

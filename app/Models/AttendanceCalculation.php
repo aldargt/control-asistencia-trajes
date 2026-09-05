@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class AttendanceCalculation extends Model
 {
@@ -45,5 +46,10 @@ class AttendanceCalculation extends Model
     public function days(): HasMany
     {
         return $this->hasMany(AttendanceCalculationDay::class)->orderBy('work_date');
+    }
+
+    public function remuneration(): HasOne
+    {
+        return $this->hasOne(RemunerationCalculation::class);
     }
 }
